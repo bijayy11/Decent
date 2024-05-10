@@ -31,26 +31,32 @@ def encrypt(key, plaintext):
 
 
 def decrypt(key, ciphertext):
-  """Decrypts ciphertext using AES in CBC mode with PKCS#7 unpadding"""
-  key = key[:32]  # Enforce 32-byte key for AES-256
-  iv = ciphertext[:16]  # Extract IV from the beginning of ciphertext
-  ciphertext = ciphertext[16:]  # Remove IV from the payload
+    """Decrypts ciphertext using AES in CBC mode with PKCS#7 unpadding"""
+    key = key[:32]  # Enforce 32-byte key for AES-256
+    iv = ciphertext[:16]  # Extract IV from the beginning of ciphertext
+    ciphertext = ciphertext[16:]  # Remove IV from the payload
 
-  cipher = ciphers.Cipher(
-      algorithms.AES(key),
-      modes.CBC(iv),
-      backend=default_backend()
-  )
-  decryptor = cipher.decryptor()
-  unpadder = padding.PKCS7(cipher.algorithm.block_size).unpadder()  # Dynamic unpadding
-  plaintext = unpadder.update(ciphertext) + unpadder.finalize()
+    cipher = ciphers.Cipher(
+        algorithms.AES(key),
+        modes.CBC(iv),
+        backend=default_backend()
+    )
+    decryptor = cipher.decryptor()
 
-  return plaintext
+    # Decrypt the ciphertext
+    decrypted_data = decryptor.update(ciphertext) + decryptor.finalize()
+
+    # Remove padding
+    unpadder = padding.PKCS7(cipher.algorithm.block_size).unpadder()
+    plaintext = unpadder.update(decrypted_data) + unpadder.finalize()
+
+    return plaintext
+
 
 
 # Example usage
 key = generate_random_key()
-plaintext = "This is a secret message".encode()
+plaintext = "This is a Secret Message".encode()
 ciphertext = encrypt(key, plaintext)
 decrypted_text = decrypt(key, ciphertext)
 

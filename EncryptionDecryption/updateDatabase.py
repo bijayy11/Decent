@@ -1,41 +1,35 @@
-#this is just a template file for now.
+import mysql.connector
+
+def connect_to_database():
+    return mysql.connector.connect(
+      host='host',
+        user='username',
+        password='password',
+        database='schema'
+    )
+def create_table():
+    conn = connect_to_database()
+    c = conn.cursor()
+    c.execute('''CREATE TABLE IF NOT EXISTS hashtable
+                 (key VARCHAR(255) PRIMARY KEY, value TEXT)''')
+    conn.commit()
+    conn.close()
 
 
-from flask import Flask, request, send_file
-import csv
+def insert_key_value(key, value):
+    conn = connect_to_database()
+    c = conn.cursor()
+    c.execute("INSERT INTO hashtable (key, value) VALUES (%s, %s) ON DUPLICATE KEY UPDATE value = %s", (key, value, value))
+    conn.commit()
+    conn.close()
 
-app = Flask(__name__)
+def get_value(key):
+    conn = connect_to_database()
+    c = conn.cursor()
+    c.execute("SELECT value FROM hashtable WHERE key=%s", (key,))
+    result = c.fetchone()
+    conn.close()
+    return result[0] if result else None
 
-# Route to handle downloading the CSV file
-@app.route('/download', methods=['GET'])
-def download():
-    # Path to the CSV file on the server
-    csv_file_path = 'publicKeys.csv'
-    return send_file(csv_file_path, as_attachment=True)
 
-# Route to handle uploading and updating the CSV file
-@app.route('/upload', methods=['POST'])
-def upload():
-    if 'file' not in request.files:
-        return 'No file part'
 
-    file = request.files['file']
-
-    if file.filename == '':
-        return 'No selected file'
-
-    if file:
-        # Path to the CSV file on the server
-        csv_file_path = 'publicKeys.csv'
-
-        # Read the CSV file
-        try:
-            with open(csv_file_path, 'a') as f:
-                # Append new entries to the CSV file
-                f.write(file.stream.read().decode("utf-8"))
-            return 'File uploaded and appended successfully'
-        except Exception as e:
-            return f'Error: {e}'
-
-if __name__ == '__main__':
-    app.run(debug=True)
