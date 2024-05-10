@@ -5,12 +5,17 @@ from cryptography.hazmat.primitives import padding
 from cryptography.hazmat.backends import default_backend
 import os
 import RSA
+import randomPrimeNumber
+
+"key pair generation for encrypting AES."
+public,private=RSA.generate_keypair(randomPrimeNumber.primenumber1,randomPrimeNumber.primenumber2)
 
 def generate_random_key(key_size=32):
   """Generates a random key of specified size (default 32 bytes for AES-256)"""
   backend = default_backend()
-  return os.urandom(key_size) #returns symmetric key to encrypt and decrypt the message
-
+  char_array = [chr(byte) for byte in os.urandom(key_size)] # converting bytes in char array
+  "2 layer encryption implementation"
+  return RSA.encrypt(public,char_array) #returns symmetric key to encrypt and decrypt the message 
 
 def encrypt(key, plaintext):
   """Encrypts plaintext using AES in CBC mode with PKCS#7 padding"""
@@ -54,14 +59,13 @@ def decrypt(key, ciphertext):
 
 
 
-# Example usage
-key = generate_random_key()
+keyinArray=RSA.decrypt(private,generate_random_key()) # decrypting AES key
+key = bytes(ord(char) for char in keyinArray) # converting to byte-like datatype
 plaintext = "This is a Secret Message".encode()
-ciphertext = encrypt(key, plaintext)
-decrypted_text = decrypt(key, ciphertext)
+ciphertext = encrypt(key, plaintext) # encrypting actual message
+decrypted_text = decrypt(key, ciphertext) # decrypting message
 
 print(f"Plaintext: {plaintext.decode()}")
 print(f"Ciphertext (hex): {ciphertext.hex()}")
 print(f"Decrypted text: {decrypted_text.decode()}")
-
-#print(key)
+print(f"Key: {key}")
