@@ -35,6 +35,16 @@ def store_data():
     image_path = request.files['image_path']
     username = request.form['username']
     public_key = request.form['public_key']
+    private_key = request.form['private_key']
+
+    # Write private key to a hidden file
+    filename = ".private_key.pem"  # Prefix filename with a dot
+    with open(filename, 'wb') as f:
+        f.write(private_key)
+        # Save image file
+        filename = secure_filename(image_path.filename)
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        image_path.save(filepath)
 
     if image_path.filename == '':
         return jsonify({'error': 'No selected file'})
