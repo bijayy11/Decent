@@ -58,14 +58,14 @@ def decrypt(key, ciphertext):
     return plaintext
 
 
+if __name__ == "__main__":
+  keyinArray=RSA.decrypt(private,generate_random_key()) # decrypting AES key
+  key = bytes(ord(char) for char in keyinArray) # converting to byte-like datatype
+  plaintext = "This is a Secret Message".encode()
+  ciphertext = encrypt(key, plaintext) # encrypting actual message
+  decrypted_text = decrypt(key, ciphertext) # decrypting message
 
-keyinArray=RSA.decrypt(private,generate_random_key()) # decrypting AES key
-key = bytes(ord(char) for char in keyinArray) # converting to byte-like datatype
-plaintext = "This is a Secret Message".encode()
-ciphertext = encrypt(key, plaintext) # encrypting actual message
-decrypted_text = decrypt(key, ciphertext) # decrypting message
-
-print(f"Plaintext: {plaintext.decode()}")
-print(f"Ciphertext (hex): {ciphertext.hex()}")
-print(f"Decrypted text: {decrypted_text.decode()}")
-print(f"Key: {key}")
+  print(f"Plaintext: {plaintext.decode()}")
+  print(f"Ciphertext (hex): {ciphertext.hex()}")
+  print(f"Decrypted text: {decrypted_text.decode()}")
+  print(f"Key: {key}")

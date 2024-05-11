@@ -14,6 +14,7 @@ def generate_sha_hash(input_string):
     
     return hashed_string
 
-"""input_string = "Hello, World!"
-hashed_string = generate_sha_hash(input_string)
-print("SHA hash of '{}' is: {}".format(input_string, hashed_string))"""
+if __name__ == "__main__":
+    """input_string = "Hello, World!"
+    hashed_string = generate_sha_hash(input_string)
+    print("SHA hash of '{}' is: {}".format(input_string, hashed_string))"""

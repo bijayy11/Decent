@@ -13,7 +13,7 @@ def mod_inverse(a, m):
         x0, x1 = x1 - q * x0, x0
     return x1 + m0 if x1 < 0 else x1
 
-def generate_keypair(p, q):
+def generate_keypair(p=randomPrimeNumber.primenumber1 , q=randomPrimeNumber.primenumber2):
     n = p * q
     phi = (p - 1) * (q - 1)
 
@@ -38,16 +38,13 @@ def decrypt(private_key, ciphertext):
     return ''.join(decrypted_msg)
 
 
-# test tu ensure the algorithm runs as expected.
-"""p = randomPrimeNumber.primenumber1 
-q= randomPrimeNumber.primenumber2
+if __name__ == "__main__":
+    public_key, private_key = generate_keypair()
+    plaintext = "There will be blood."
+    encrypted_msg = encrypt(public_key, plaintext)
+    decrypted_msg = decrypt(private_key, encrypted_msg)
 
-public_key, private_key = generate_keypair(p, q)
-plaintext = "There will be blood."
-encrypted_msg = encrypt(public_key, plaintext)
-decrypted_msg = decrypt(private_key, encrypted_msg)
-
-print("Public Key:", public_key)
-print("Private Key:", private_key)
-print("Encrypted Message:", encrypted_msg)
-print("Decrypted Message:", decrypted_msg)"""
+    print("Public Key:", public_key)
+    print("Private Key:", private_key)
+    print("Encrypted Message:", encrypted_msg)
+    print("Decrypted Message:", decrypted_msg)

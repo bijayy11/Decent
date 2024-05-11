@@ -17,5 +17,11 @@ file_path = './prime_numbers/1m.csv'
 Primenums = read_num_from_csv(file_path)
 primenumber1=pick_random_number(Primenums)
 primenumber2=pick_random_number(Primenums)
-print(primenumber1)
-print(primenumber2)
+
+if __name__ == "__main__":
+    file_path = './prime_numbers/1m.csv'
+    Primenums = read_num_from_csv(file_path)
+    primenumber1=pick_random_number(Primenums)
+    primenumber2=pick_random_number(Primenums)
+    print(primenumber1)
+    print(primenumber2)
